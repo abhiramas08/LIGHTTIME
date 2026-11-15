@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LIGHTTIME: Human-Centred Autonomous Lunar Mission Simulator
 
 > **An Educational Lunar Mission Command, Life-Support & Human-Factors Simulation Platform**  
@@ -492,3 +493,7 @@ The simulation engine (`src/simulation/engine/core.ts`) executes a deterministic
 
 ## 📄 License
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+=======
+# LIGHTTIME
+An educational lunar mission simulator for managing a four-member astronaut crew during a 30-day lunar expedition.
+>>>>>>> 8241c98a7e8d7313b8ddb2a67daceff69f2082e1
