@@ -7,7 +7,8 @@ import { TechnicalLabel } from '@/components/common/TechnicalLabel';
 import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
 import { Alert } from '@/components/common/Alert';
-import { Send, Users, Activity, Radio, CheckCircle, Clock } from 'lucide-react';
+import { Send, Users, Activity, Radio, CheckCircle, Clock, Sparkles } from 'lucide-react';
+import { useInstructorStore } from '@/store/useInstructorStore';
 
 export const DashboardView: React.FC = () => {
   const {
@@ -41,6 +42,57 @@ export const DashboardView: React.FC = () => {
         Surface establishment complete. Astronauts are conducting initial systems activation.
         All uplink instructions incur a 1.282s propagation delay to Moon habitat and 1.282s acknowledgment return.
       </Alert>
+
+      {/* AI Mission Instructor Briefing Card */}
+      <Card withBracket className="bg-space-deep/90 border-telemetry-cyan/40">
+        <CardHeader className="pb-2 border-b border-panel-blue/40 flex flex-row items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-telemetry-cyan animate-pulse" />
+            <CardTitle className="text-xs text-telemetry-cyan font-bold uppercase tracking-wider">
+              AI Mission Instructor • Flight Director Mentor
+            </CardTitle>
+          </div>
+          <Badge variant="nominal">Read-Only Advisory</Badge>
+        </CardHeader>
+        <CardContent className="pt-3 font-mono text-xs space-y-2">
+          <p className="text-offwhite/80 font-sans text-xs">
+            Flight Director Mentor: Habitat life support loops are closing nominally. Cryogenic oxygen buffer provides &gt;120 days of margin.
+            Crew circadian fatigue remains in the rested band (&lt;35%). Maintaining disciplined 8.0-hour sleep cycles is your primary defense against PVT attentional lapses.
+          </p>
+          <div className="flex items-center justify-between pt-1 border-t border-panel-blue/30 text-[11px] flex-wrap gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => useInstructorStore.getState().askInstructor('Why are my habitat resources decreasing?')}
+                className="text-[10px] py-0.5 px-2 text-offwhite/80 hover:text-telemetry-cyan border-panel-blue/60"
+              >
+                Why Resources Decrease
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  useInstructorStore.getState().setActiveTab('WARNINGS');
+                  useInstructorStore.getState().setOpen(true);
+                }}
+                className="text-[10px] py-0.5 px-2 text-warning-amber hover:text-white border-warning-amber/40"
+              >
+                Explain Warnings
+              </Button>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => useInstructorStore.getState().toggleOpen()}
+              className="text-xs flex items-center gap-1.5 text-telemetry-cyan border-telemetry-cyan/50"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Ask the Mission Instructor</span>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* 4-Member Astronaut Crew Grid */}
       <section className="space-y-3">

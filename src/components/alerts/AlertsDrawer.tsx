@@ -12,10 +12,12 @@ import {
   ArrowRight,
   UserCheck,
   Search,
+  Sparkles,
 } from 'lucide-react';
 import { MissionEventRecord } from '@/simulation/models/missionState';
 import { normalizeSeverity } from '@/simulation/models/eventTypes';
 import { EventDetailsModal } from '@/components/events/EventDetailsModal';
+import { useInstructorStore } from '@/store/useInstructorStore';
 
 interface AlertsDrawerProps {
   isOpen: boolean;
@@ -180,7 +182,30 @@ export const AlertsDrawer: React.FC<AlertsDrawerProps> = ({ isOpen, onClose }) =
                     </p>
 
                     <div className="mt-2 pt-1.5 border-t border-panel-blue/20 flex items-center justify-between text-[9px] text-offwhite/50">
-                      <span>Click to view telemetry details</span>
+                      {isCritical || isWarning ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onClose();
+                            useInstructorStore.getState().explainWarning({
+                              warningId: evt.eventId,
+                              subsystem: evt.affectedSystem || evt.category,
+                              severity: isCritical ? 'CRITICAL' : 'WARNING',
+                              headline: evt.title,
+                              currentValue: evt.newValue || 'Caution Active',
+                              thresholdValue: 'Nominal Limit',
+                              details: evt.details,
+                            });
+                          }}
+                          className="text-warning-amber hover:text-white font-bold flex items-center gap-1 hover:underline"
+                        >
+                          <Sparkles className="h-2.5 w-2.5 text-warning-amber animate-pulse" />
+                          EXPLAIN WARNING
+                        </button>
+                      ) : (
+                        <span>Click to view telemetry details</span>
+                      )}
                       <span className="text-signal-cyan font-bold flex items-center gap-0.5">
                         INSPECT <ArrowRight className="h-2.5 w-2.5" />
                       </span>

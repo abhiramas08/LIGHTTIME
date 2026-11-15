@@ -992,3 +992,37 @@ function recordPeriodicTelemetry(state: MissionState): void {
     state.records.crewWellbeingHistory.splice(0, 4);
   }
 }
+
+// ============================================================================
+// Circadian-Aware Multi-Hour Simulation Stepper
+// ============================================================================
+
+/**
+ * Advances simulation time across multiple hours with realistic circadian sleep cycles.
+ * Each 24-hour sol dedicates hours 0-7 to restorative crew sleep unless in active emergency/EVA.
+ */
+export function advanceWithCircadianCycle(
+  state: MissionState,
+  hours: number,
+  config: SimulationConfig = DEFAULT_SIMULATION_CONFIG
+): MissionState {
+  let curr = cloneMissionState(state);
+  let remaining = hours;
+  while (remaining > 0 && curr.mission.missionStatus === 'ACTIVE') {
+    const step = Math.min(remaining, 1);
+    const hourOfDay = curr.mission.elapsedHours % 24;
+    const isSleep = hourOfDay < 8; // 8 hours restorative sleep per 24h sol
+    curr.crew = curr.crew.map((c) => {
+      if (c.availability === 'ON_EVA' || c.availability === 'MEDICAL_RESTRICTED') return c;
+      return {
+        ...c,
+        availability: isSleep ? 'SLEEPING' : 'AVAILABLE',
+        sleepHours: 8.0,
+      };
+    }) as any;
+
+    curr = tickSimulation(curr, step, config);
+    remaining -= step;
+  }
+  return curr;
+}

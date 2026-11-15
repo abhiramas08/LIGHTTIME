@@ -52,7 +52,7 @@ export const MissionHistoryView: React.FC = () => {
             className="gap-1.5 text-xs font-bold"
           >
             <BookOpen className="h-3.5 w-3.5" />
-            <span>SAVED MISSIONS LIBRARY ({savedRuns.length})</span>
+            <span>SAVED EXPEDITIONS ARCHIVE ({savedRuns.length})</span>
           </Button>
 
           <Button
@@ -62,7 +62,7 @@ export const MissionHistoryView: React.FC = () => {
             className="gap-1.5 text-xs font-bold"
           >
             <FileText className="h-3.5 w-3.5" />
-            <span>MISSION SUMMARY & AUDIT</span>
+            <span>EXPEDITION SUMMARY & AUDIT</span>
           </Button>
 
           <Button

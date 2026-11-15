@@ -14,9 +14,11 @@ import {
   FileText,
   UserCheck,
   ShieldAlert,
+  Sparkles,
 } from 'lucide-react';
 import { MissionEventRecord } from '@/simulation/models/missionState';
 import { normalizeSeverity } from '@/simulation/models/eventTypes';
+import { useInstructorStore } from '@/store/useInstructorStore';
 
 interface EventDetailsModalProps {
   event: MissionEventRecord | null;
@@ -214,14 +216,29 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
               )}
             </div>
 
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={onClose}
-              className="font-bold text-xs font-mono tracking-wider"
-            >
-              DISMISS PANEL
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  onClose();
+                  useInstructorStore.getState().explainEvent(event);
+                }}
+                className="gap-1.5 text-telemetry-cyan border-telemetry-cyan/60 hover:bg-telemetry-cyan/15 text-xs font-mono font-bold"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-telemetry-cyan animate-pulse" />
+                EXPLAIN THIS EVENT
+              </Button>
+
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={onClose}
+                className="font-bold text-xs font-mono tracking-wider"
+              >
+                DISMISS PANEL
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

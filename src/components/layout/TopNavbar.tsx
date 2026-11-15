@@ -11,7 +11,9 @@ import {
   User,
   Pause,
   Play,
+  Sparkles,
 } from 'lucide-react';
+import { useInstructorStore } from '@/store/useInstructorStore';
 import { cn } from '@/utils/cn';
 
 export interface TopNavbarProps {
@@ -150,6 +152,19 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               size="sm"
             />
           </div>
+
+          {/* AI Mission Instructor Trigger */}
+          <button
+            type="button"
+            onClick={() => useInstructorStore.getState().toggleOpen()}
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-control-navy border border-telemetry-cyan/60 hover:border-telemetry-cyan text-offwhite hover:text-telemetry-cyan transition-colors"
+            title="Open AI Mission Instructor"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-telemetry-cyan animate-pulse" />
+            <span className="font-mono text-xs font-bold uppercase tracking-wider hidden sm:inline">
+              AI Instructor
+            </span>
+          </button>
 
           {/* User Profile */}
           <div className="flex items-center gap-2 pl-1 border-l border-panel-blue/60">

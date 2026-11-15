@@ -7,3 +7,8 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
+// Global scrollIntoView mock for JSDOM
+if (typeof window !== 'undefined' && window.HTMLElement) {
+  window.HTMLElement.prototype.scrollIntoView = function () {};
+}
+

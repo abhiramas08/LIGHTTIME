@@ -7,7 +7,7 @@
  */
 
 import { SavedMissionRun } from '@/simulation/models/missionHistory';
-import { createInitialMissionState, cloneMissionState, tickSimulation } from '@/simulation/engine/core';
+import { createInitialMissionState, cloneMissionState, advanceWithCircadianCycle } from '@/simulation/engine/core';
 import { applyMissionCommand } from '@/simulation/commands/commandDispatcher';
 
 // ============================================================================
@@ -30,19 +30,19 @@ function buildExpedition30Run(): SavedMissionRun {
   let state = cloneMissionState(initial);
 
   // Advance to Hour 12 and perform maintenance
-  state = tickSimulation(state, 12);
+  state = advanceWithCircadianCycle(state, 12);
   const act1 = applyMissionCommand(state, {
     subsystem: 'EQUIPMENT',
     action: 'START_MAINTENANCE',
-    parameters: { equipmentId: 'EQ-CDRA-01' },
+    parameters: { equipmentId: 'EQ-ECLSS-CDRA-01' },
     initiatedBy: 'GROUND',
   });
   state = act1.updatedState;
 
   // Advance to Hour 72 and schedule sleep
-  state = tickSimulation(state, 60);
+  state = advanceWithCircadianCycle(state, 60);
   const act2 = applyMissionCommand(state, {
-    subsystem: 'CREW',
+    subsystem: 'CREW_SCHEDULE',
     action: 'SCHEDULE_SLEEP_PERIOD',
     parameters: { sleepHours: 8 },
     targetAstronautId: 'ASTRO-1',
@@ -51,7 +51,7 @@ function buildExpedition30Run(): SavedMissionRun {
   state = act2.updatedState;
 
   // Advance to Hour 168 (Sol 7) and reduce non-essential power during lunar night
-  state = tickSimulation(state, 96);
+  state = advanceWithCircadianCycle(state, 96);
   const act3 = applyMissionCommand(state, {
     subsystem: 'POWER_GRID',
     action: 'REDUCE_NON_ESSENTIAL_POWER',
@@ -61,7 +61,7 @@ function buildExpedition30Run(): SavedMissionRun {
   state = act3.updatedState;
 
   // Advance remaining time to 720 hours (Sol 30)
-  state = tickSimulation(state, 720 - 168);
+  state = advanceWithCircadianCycle(state, 720 - 168);
   state.mission.missionStatus = 'COMPLETED';
 
   return {
@@ -106,11 +106,11 @@ function buildCryoTriageRun(): SavedMissionRun {
   let state = cloneMissionState(initial);
 
   // Advance to Hour 24
-  state = tickSimulation(state, 24);
+  state = advanceWithCircadianCycle(state, 24);
 
-  // Discard leak isolation command
+  // Leak isolation command
   const act1 = applyMissionCommand(state, {
-    subsystem: 'ECLSS_O2',
+    subsystem: 'ECLSS',
     action: 'EMERGENCY_ISOLATE_LEAK',
     parameters: { valveId: 'VALVE-O2-FEED-ALPHA' },
     initiatedBy: 'CREW',
@@ -118,9 +118,9 @@ function buildCryoTriageRun(): SavedMissionRun {
   state = act1.updatedState;
 
   // Advance to Hour 26 and activate backup O2
-  state = tickSimulation(state, 2);
+  state = advanceWithCircadianCycle(state, 2);
   const act2 = applyMissionCommand(state, {
-    subsystem: 'ECLSS_O2',
+    subsystem: 'ECLSS',
     action: 'EMERGENCY_ACTIVATE_BACKUP_O2',
     parameters: {},
     initiatedBy: 'CREW',
@@ -128,7 +128,7 @@ function buildCryoTriageRun(): SavedMissionRun {
   state = act2.updatedState;
 
   // Advance to Hour 48 and reduce non-essential power
-  state = tickSimulation(state, 22);
+  state = advanceWithCircadianCycle(state, 22);
   const act3 = applyMissionCommand(state, {
     subsystem: 'POWER_GRID',
     action: 'REDUCE_NON_ESSENTIAL_POWER',
@@ -138,7 +138,7 @@ function buildCryoTriageRun(): SavedMissionRun {
   state = act3.updatedState;
 
   // Advance to 336 hours (14 Sols)
-  state = tickSimulation(state, 336 - 48);
+  state = advanceWithCircadianCycle(state, 336 - 48);
   state.mission.missionStatus = 'COMPLETED';
 
   return {
@@ -183,9 +183,9 @@ function buildActiveSortieRun(): SavedMissionRun {
   let state = cloneMissionState(initial);
 
   // Advance to Hour 48
-  state = tickSimulation(state, 48);
+  state = advanceWithCircadianCycle(state, 48);
   const act1 = applyMissionCommand(state, {
-    subsystem: 'CREW',
+    subsystem: 'CREW_SCHEDULE',
     action: 'SCHEDULE_EXERCISE_SESSION',
     parameters: { exerciseMinutes: 60 },
     targetAstronautId: 'ASTRO-2',
@@ -194,17 +194,17 @@ function buildActiveSortieRun(): SavedMissionRun {
   state = act1.updatedState;
 
   // Advance to Hour 120
-  state = tickSimulation(state, 72);
+  state = advanceWithCircadianCycle(state, 72);
   const act2 = applyMissionCommand(state, {
     subsystem: 'EQUIPMENT',
     action: 'START_MAINTENANCE',
-    parameters: { equipmentId: 'EQ-H2O-REC-01' },
+    parameters: { equipmentId: 'EQ-ECLSS-WRS-01' },
     initiatedBy: 'GROUND',
   });
   state = act2.updatedState;
 
   // Advance to Hour 290 (Day 13)
-  state = tickSimulation(state, 290 - 120);
+  state = advanceWithCircadianCycle(state, 290 - 120);
 
   return {
     missionId: 'LT-EXP31-ACTIVE-SORTIE',

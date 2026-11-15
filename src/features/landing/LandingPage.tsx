@@ -18,6 +18,7 @@ import {
   Wind,
   Droplets,
   Zap,
+  Sparkles,
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
@@ -494,6 +495,57 @@ export const LandingPage: React.FC = () => {
               <span className="text-offwhite font-bold text-sm block">04. Reactive State</span>
               <p className="text-offwhite/70 font-sans text-xs">
                 Zustand stores synchronize immutable snapshots directly into aerospace telemetry widgets.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6.5: Public Access & AI Mission Instructor */}
+      <section className="py-16 sm:py-24 border-b border-panel-blue/50 bg-space-surface/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <span className="text-xs font-mono text-telemetry-cyan uppercase tracking-widest flex items-center justify-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 animate-pulse text-telemetry-cyan" />
+              100% PUBLIC ACCESS • NO ACCOUNT REQUIRED
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-offwhite">
+              AI Mission Instructor & Open Exploration
+            </h2>
+            <p className="text-sm font-sans text-offwhite/70 leading-relaxed">
+              LIGHTTIME is completely free and openly accessible. No registration, no login, and no paywalls.
+              Every student and space enthusiast can launch a mission immediately and consult our read-only AI Flight Director mentor.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
+            <div className="p-5 bg-control-navy tech-border space-y-2.5">
+              <div className="flex items-center gap-2 text-nominal-green font-bold text-sm">
+                <ShieldCheck className="h-4 w-4" />
+                <span>Zero Authentication Friction</span>
+              </div>
+              <p className="text-offwhite/70 font-sans text-xs leading-relaxed">
+                Start a mission directly. No passwords, no email verification, and no personal data collection. Your mission state is preserved locally in your browser session.
+              </p>
+            </div>
+
+            <div className="p-5 bg-control-navy tech-border space-y-2.5">
+              <div className="flex items-center gap-2 text-telemetry-cyan font-bold text-sm">
+                <Sparkles className="h-4 w-4" />
+                <span>AI Flight Director Mentor</span>
+              </div>
+              <p className="text-offwhite/70 font-sans text-xs leading-relaxed">
+                Stuck on a life support anomaly or high crew fatigue? The AI Instructor explains complex NASA ECLSS mass-balances and neurobehavioral fatigue models in plain, accessible language.
+              </p>
+            </div>
+
+            <div className="p-5 bg-control-navy tech-border space-y-2.5">
+              <div className="flex items-center gap-2 text-warning-amber font-bold text-sm">
+                <Activity className="h-4 w-4" />
+                <span>Strict Read-Only Protection</span>
+              </div>
+              <p className="text-offwhite/70 font-sans text-xs leading-relaxed">
+                The AI instructor cannot mutate your simulation state, time, or emergency outcomes. You maintain complete flight command autonomy at all times.
               </p>
             </div>
           </div>

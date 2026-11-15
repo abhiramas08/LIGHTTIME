@@ -21,6 +21,7 @@ import {
   MissionEventRecord,
   MissionRecords,
 } from '@/simulation/models/missionState';
+import { missionStateSchema } from '@/simulation/validation/missionStateSchema';
 import {
   tickSimulation,
   createInitialMissionState,
@@ -249,6 +250,7 @@ export interface MissionStoreState {
   ) => void;
   restoreSavedMission: () => boolean;
   clearSavedMission: () => void;
+  importMissionState: (newState: unknown) => { success: boolean; error?: string };
   acknowledgeEvent: (eventId: string) => void;
   acknowledgeAllEvents: () => void;
 }
@@ -748,6 +750,37 @@ export const useMissionStore = create<MissionStoreState>((set, get) => ({
     });
 
     return true;
+  },
+
+  importMissionState: (newState: unknown) => {
+    const parseResult = missionStateSchema.safeParse(newState);
+    if (!parseResult.success) {
+      console.error('[LIGHTTIME Import Validation Error]', parseResult.error);
+      return { success: false, error: parseResult.error.errors[0]?.message || 'Schema validation failed' };
+    }
+    const validatedState = parseResult.data as MissionState;
+    saveMissionToStorage(validatedState);
+    set({
+      missionState: validatedState,
+      simulationStatus: validatedState.mission.missionStatus,
+      missionHistory: validatedState.records,
+      userActions: validatedState.records.actionHistory,
+      activeScenario: validatedState.emergency.activeScenario,
+      missionEventLog: validatedState.records.eventHistory,
+      crew: mapCanonicalCrewToAstronauts(validatedState.crew),
+      telemetry: mapCanonicalToTelemetry(validatedState),
+      mission: {
+        ...get().mission,
+        id: validatedState.mission.missionId,
+        name: validatedState.mission.missionName,
+        currentDay: validatedState.mission.missionDay,
+        totalDays: validatedState.mission.missionDuration,
+        metSeconds: Math.round(validatedState.mission.elapsedHours * 3600),
+        elapsedHours: validatedState.mission.elapsedHours,
+        isRunning: validatedState.mission.missionStatus === 'ACTIVE',
+      },
+    });
+    return { success: true };
   },
 
   clearSavedMission: () => {

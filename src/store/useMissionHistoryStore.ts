@@ -104,7 +104,7 @@ export const useMissionHistoryStore = create<MissionHistoryState>((set, get) => 
 
   return {
     savedRuns: initialRuns,
-    activeTab: 'library',
+    activeTab: 'events',
     selectedRunId: defaultSelectedId,
     comparisonRunIds: defaultComparisonIds,
     activeReplay: null,
@@ -173,6 +173,7 @@ export const useMissionHistoryStore = create<MissionHistoryState>((set, get) => 
       persistRunsToStorage(DEFAULT_SAVED_RUNS);
       set({
         savedRuns: DEFAULT_SAVED_RUNS,
+        activeTab: 'events',
         selectedRunId: DEFAULT_SAVED_RUNS[0]?.missionId || null,
         comparisonRunIds: [DEFAULT_SAVED_RUNS[0]!.missionId, DEFAULT_SAVED_RUNS[1]!.missionId],
         activeReplay: null,

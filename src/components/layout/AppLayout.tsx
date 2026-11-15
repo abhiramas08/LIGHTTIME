@@ -7,6 +7,8 @@ import { SimulationControlBar } from '@/components/mission/SimulationControlBar'
 import { Dialog } from '@/components/common/Dialog';
 import { Button } from '@/components/common/Button';
 import { Heart, Activity, Brain, Radiation, ShieldCheck, MapPin } from 'lucide-react';
+import { AiInstructorDrawer } from '@/components/instructor/AiInstructorDrawer';
+import { AiInstructorTrigger } from '@/components/instructor/AiInstructorTrigger';
 
 export interface AppLayoutProps {
   children?: React.ReactNode;
@@ -147,6 +149,12 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           </div>
         </Dialog>
       )}
+
+      {/* Floating AI Mission Instructor Trigger */}
+      <AiInstructorTrigger />
+
+      {/* Slide-over AI Mission Instructor Drawer */}
+      <AiInstructorDrawer />
     </div>
   );
 };

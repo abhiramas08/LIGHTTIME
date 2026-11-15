@@ -20,7 +20,10 @@ import {
   Droplet,
   Compass,
   Cpu,
+  Sparkles,
 } from 'lucide-react';
+import { useInstructorStore } from '@/store/useInstructorStore';
+import { Button } from '@/components/common/Button';
 import { DecisionAnalysis } from '@/simulation/models/missionDebrief';
 
 interface DecisionAnalysisCardProps {
@@ -128,6 +131,30 @@ export const DecisionAnalysisCard: React.FC<DecisionAnalysisCardProps> = ({
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* AI Mission Instructor Interactive Critique Trigger */}
+        <div className="p-3 bg-control-navy border border-telemetry-cyan/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-telemetry-cyan animate-pulse shrink-0" />
+            <div>
+              <div className="font-bold text-offwhite text-xs">AI Flight Director Post-Flight Analysis</div>
+              <div className="text-[10px] text-offwhite/60 font-sans">
+                Review automated feedback on sleep debt, load shedding, and emergency reaction times.
+              </div>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              useInstructorStore.getState().requestDebriefFeedback();
+            }}
+            className="text-xs shrink-0 flex items-center gap-1.5 text-telemetry-cyan border-telemetry-cyan/50"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Post-Mission Learning Feedback</span>
+          </Button>
         </div>
       </CardContent>
     </Card>

@@ -18,7 +18,7 @@ import {
   MissionComparisonReport,
   MissionComparisonMetricRow,
 } from '../models/missionHistory';
-import { cloneMissionState, tickSimulation } from './core';
+import { cloneMissionState, advanceWithCircadianCycle } from './core';
 import { applyMissionCommand, MissionCommandInput } from '../commands/commandDispatcher';
 import { formatSimulationTime } from '../models/eventTypes';
 
@@ -104,12 +104,7 @@ export function generateReplayTimeline(savedRun: SavedMissionRun): {
     // 1. Advance simulation up to this milestone
     const deltaHours = nextMilestone - simulatedHour;
     if (deltaHours > 0) {
-      let hoursLeft = deltaHours;
-      while (hoursLeft > 0) {
-        const step = Math.min(hoursLeft, 1);
-        currentState = tickSimulation(currentState, step);
-        hoursLeft -= step;
-      }
+      currentState = advanceWithCircadianCycle(currentState, deltaHours);
       simulatedHour = nextMilestone;
     }
 
